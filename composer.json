@@ -18,6 +18,5 @@
     "monolog/monolog": "Allows more advanced logging of the application flow"
   },
   "homepage": "https://github.com/lucas-simas/Cielo-3.0-PHP",
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  "minimum-stability": "dev"
 }

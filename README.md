@@ -3,7 +3,7 @@ Lib retirada do Cielo Developers (descontinuada?)
 
 ```json
 "require": {
-    "lucas-simas/cielo-api-3.0-php": "^1.0"
+    "lucas-simas/cielo-api-3.0-php": "*"
 }
 ```
 

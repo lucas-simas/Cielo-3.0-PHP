@@ -1,5 +1,5 @@
 {
-  "name": "lucas-simas/cielo-api-3.0-php",
+  "name": "lucas-simas/cielo-api-php",
   "description": "Integração com a API 3.0 da Cielo",
   "type": "library",
   "require": {

@@ -1,6 +1,12 @@
 # Importante
 Lib retirada do Cielo Developers (descontinuada?)
 
+```json
+"require": {
+    "lucas-simas/cielo-api-3.0-php": "^1.0"
+}
+```
+
 # API-3.0-PHP
 
 SDK API-3.0 PHP

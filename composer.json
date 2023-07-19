@@ -1,19 +1,20 @@
 {
-    "name": "lucas-simas/cielo-api-3.0-php",
-    "description": "Integração com a API 3.0 da Cielo",
-    "type": "library",
-    "require": {
-        "php": ">=5.6",
-        "ext-curl": "*",
-        "ext-json": "*",
-        "psr/log": "^1.1"
-    },
-    "autoload": {
-      "psr-0": {
-        "Cielo": "src"
-      }
-    },
-    "homepage": "https://github.com/lucas-simas/Cielo-3.0-PHP",
-    "license": "MIT",
-    "minimum-stability": "dev"
+  "name": "lucas-simas/cielo-api-3.0-php",
+  "description": "Integração com a API 3.0 da Cielo",
+  "type": "library",
+  "require": {
+      "php": ">=5.6",
+      "ext-curl": "*",
+      "ext-json": "*",
+      "psr/log": "^1.1"
+  },
+  "autoload": {
+    "psr-0": {
+      "Cielo": "src"
+    }
+  },
+  "homepage": "https://github.com/lucas-simas/Cielo-3.0-PHP",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

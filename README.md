@@ -1,3 +1,6 @@
+#Importante
+Lib retirada do Cielo Developers (descontinuada?)
+
 # API-3.0-PHP
 
 SDK API-3.0 PHP

@@ -114,6 +114,7 @@ class CreditCard implements \JsonSerializable, CieloSerializable
     /**
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return get_object_vars($this);

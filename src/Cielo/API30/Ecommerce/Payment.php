@@ -50,6 +50,10 @@ class Payment implements \JsonSerializable
 
     private $authorizationCode;
 
+    private $issuerTransactionId;
+
+    private $tlid;
+
     private $softDescriptor = "";
 
     private $returnUrl;
@@ -172,6 +176,13 @@ class Payment implements \JsonSerializable
         $this->tid               = isset($data->Tid) ? $data->Tid : null;
         $this->proofOfSale       = isset($data->ProofOfSale) ? $data->ProofOfSale : null;
         $this->authorizationCode = isset($data->AuthorizationCode) ? $data->AuthorizationCode : null;
+
+        // Mandate Mastercard MIT: identificadores devolvidos no Payment para transacoes Mastercard
+        // (TLID vivo desde 01/07/2026). Nomes conforme doc Cielo: Payment.IssuerTransactionId e
+        // Payment.TransactionLinkId. Ficam null para transacoes que a bandeira nao os devolve.
+        $this->issuerTransactionId = isset($data->IssuerTransactionId) ? $data->IssuerTransactionId : null;
+        $this->tlid                = isset($data->TransactionLinkId) ? $data->TransactionLinkId : null;
+
         $this->softDescriptor    = isset($data->SoftDescriptor) ? $data->SoftDescriptor : null;
         $this->provider          = isset($data->Provider) ? $data->Provider : null;
         $this->paymentId         = isset($data->PaymentId) ? $data->PaymentId : null;
@@ -521,6 +532,46 @@ class Payment implements \JsonSerializable
     public function setAuthorizationCode($authorizationCode)
     {
         $this->authorizationCode = $authorizationCode;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIssuerTransactionId()
+    {
+        return $this->issuerTransactionId;
+    }
+
+    /**
+     * @param $issuerTransactionId
+     *
+     * @return $this
+     */
+    public function setIssuerTransactionId($issuerTransactionId)
+    {
+        $this->issuerTransactionId = $issuerTransactionId;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTlid()
+    {
+        return $this->tlid;
+    }
+
+    /**
+     * @param $tlid
+     *
+     * @return $this
+     */
+    public function setTlid($tlid)
+    {
+        $this->tlid = $tlid;
 
         return $this;
     }

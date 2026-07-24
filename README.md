@@ -4,7 +4,7 @@ Lib retirada do Cielo Developers (descontinuada?)
 Composer 2 é necessário
 ```json
 "require": {
-    "lucas-simas/cielo-api-3.0-php": "^v1.3.1"
+    "lucas-simas/cielo-api-3.0-php": "^v1.3.2"
 }
 ```
 

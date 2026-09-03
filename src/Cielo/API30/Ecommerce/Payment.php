@@ -54,6 +54,8 @@ class Payment implements \JsonSerializable
 
     private $tlid;
 
+    private $initiatedTransactionIndicator;
+
     private $softDescriptor = "";
 
     private $returnUrl;
@@ -213,7 +215,17 @@ class Payment implements \JsonSerializable
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
-        return get_object_vars($this);
+        $vars = get_object_vars($this);
+
+        //TransactionLinkId (Mastercard MIT): "tlid" e o nome interno do getter/setter, mas nao
+        //e o nome de campo que a Cielo espera no request (nao e so uma questao de caixa como
+        //os demais campos da lib, e uma palavra diferente). Renomeia so na serializacao de saida.
+        if (array_key_exists('tlid', $vars)) {
+            $vars['transactionLinkId'] = $vars['tlid'];
+            unset($vars['tlid']);
+        }
+
+        return $vars;
     }
 
     /**
@@ -573,6 +585,35 @@ class Payment implements \JsonSerializable
     public function setTlid($tlid)
     {
         $this->tlid = $tlid;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInitiatedTransactionIndicator()
+    {
+        return $this->initiatedTransactionIndicator;
+    }
+
+    /**
+     * Mandate Mastercard CIT/MIT: Category (C1/M1/M2) e Subcategory (ex: CredentialsOnFile,
+     * Subscription, Resubmission). Guardado com as chaves no formato exato da doc Cielo
+     * (PascalCase), ja que sao os nomes de campo esperados dentro do node, nao so uma questao
+     * de caixa como no restante da lib.
+     *
+     * @param $category
+     * @param $subcategory
+     *
+     * @return $this
+     */
+    public function setInitiatedTransactionIndicator($category, $subcategory)
+    {
+        $this->initiatedTransactionIndicator = array(
+            'Category'    => $category,
+            'Subcategory' => $subcategory,
+        );
 
         return $this;
     }

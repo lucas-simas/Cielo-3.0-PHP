@@ -185,6 +185,14 @@ class Payment implements \JsonSerializable
         $this->issuerTransactionId = isset($data->IssuerTransactionId) ? $data->IssuerTransactionId : null;
         $this->tlid                = isset($data->TransactionLinkId) ? $data->TransactionLinkId : null;
 
+        // Mandate Mastercard CIT/MIT: a Cielo ecoa o indicador enviado (ou o que ela propria
+        // resolveu) de volta no Payment da resposta. Guardamos no mesmo formato usado no envio
+        // (Category/Subcategory em PascalCase) pra manter o mesmo getter nos dois sentidos.
+        $this->initiatedTransactionIndicator = isset($data->InitiatedTransactionIndicator) ? array(
+            'Category'    => isset($data->InitiatedTransactionIndicator->Category) ? $data->InitiatedTransactionIndicator->Category : null,
+            'Subcategory' => isset($data->InitiatedTransactionIndicator->Subcategory) ? $data->InitiatedTransactionIndicator->Subcategory : null,
+        ) : null;
+
         $this->softDescriptor    = isset($data->SoftDescriptor) ? $data->SoftDescriptor : null;
         $this->provider          = isset($data->Provider) ? $data->Provider : null;
         $this->paymentId         = isset($data->PaymentId) ? $data->PaymentId : null;
@@ -215,17 +223,7 @@ class Payment implements \JsonSerializable
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
-        $vars = get_object_vars($this);
-
-        //TransactionLinkId (Mastercard MIT): "tlid" e o nome interno do getter/setter, mas nao
-        //e o nome de campo que a Cielo espera no request (nao e so uma questao de caixa como
-        //os demais campos da lib, e uma palavra diferente). Renomeia so na serializacao de saida.
-        if (array_key_exists('tlid', $vars)) {
-            $vars['transactionLinkId'] = $vars['tlid'];
-            unset($vars['tlid']);
-        }
-
-        return $vars;
+        return get_object_vars($this);
     }
 
     /**

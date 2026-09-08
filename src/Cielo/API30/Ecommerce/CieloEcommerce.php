@@ -7,6 +7,7 @@ use Cielo\API30\Ecommerce\Request\QueryRecurrentPaymentRequest;
 use Cielo\API30\Ecommerce\Request\QuerySaleRequest;
 use Cielo\API30\Ecommerce\Request\TokenizeCardRequest;
 use Cielo\API30\Ecommerce\Request\UpdateSaleRequest;
+use Cielo\API30\Ecommerce\Request\ZeroAuthRequest;
 use Cielo\API30\Merchant;
 use Psr\Log\LoggerInterface;
 
@@ -175,5 +176,19 @@ class CieloEcommerce
         $tokenizeCardRequest = new TokenizeCardRequest($this->merchant, $this->environment, $this->logger);
 
         return $tokenizeCardRequest->execute($card);
+    }
+
+    /**
+     * Valida um cartao sem cobrar (Zero Auth). Precisa estar habilitado junto ao suporte da Cielo.
+     *
+     * @param ZeroAuth $zeroAuth
+     *
+     * @return ZeroAuthResponse
+     */
+    public function zeroAuth(ZeroAuth $zeroAuth)
+    {
+        $zeroAuthRequest = new ZeroAuthRequest($this->merchant, $this->environment, $this->logger);
+
+        return $zeroAuthRequest->execute($zeroAuth);
     }
 }

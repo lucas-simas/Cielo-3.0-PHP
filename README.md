@@ -24,6 +24,7 @@ SDK API-3.0 PHP
 * [x] Cancelamento de autorização.
 * [x] Consulta de pagamentos.
 * [x] Tokenização de cartão.
+* [x] Validação de cartão sem cobrança (Zero Auth).
 
 ## Limitações
 
@@ -471,6 +472,56 @@ try {
 
     // Get the token
     $cardToken = $card->getCardToken();
+} catch (CieloRequestException $e) {
+    // Em caso de erros de integração, podemos tratar o erro aqui.
+    // os códigos de erro estão todos disponíveis no manual de integração.
+    $error = $e->getCieloError();
+}
+// ...
+```
+
+### Validando um cartão (Zero Auth)
+
+O Zero Auth simula uma autorização de valor zero para verificar se o cartão está válido, sem cobrar.
+A resposta devolve os identificadores da bandeira: `IssuerTransactionId` (Visa, Mastercard, Elo e
+Amex) e `TransactionLinkId` (somente Mastercard). Precisa estar habilitado junto ao suporte da Cielo.
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Cielo\API30\Merchant;
+
+use Cielo\API30\Ecommerce\Environment;
+use Cielo\API30\Ecommerce\CreditCard;
+use Cielo\API30\Ecommerce\ZeroAuth;
+use Cielo\API30\Ecommerce\CieloEcommerce;
+
+use Cielo\API30\Ecommerce\Request\CieloRequestException;
+
+// ...
+// ...
+// Configure o ambiente
+$environment = Environment::sandbox();
+
+// Configure seu merchant
+$merchant = new Merchant('MID', 'MKEY');
+
+// Monte o cartão que será validado
+$zeroAuth = new ZeroAuth('5502095822650000', 'Fulano de Tal', '12/2035', CreditCard::MASTERCARD);
+$zeroAuth->setSecurityCode('123');
+
+// Opcional: indica que o cartão será guardado para uso futuro
+$zeroAuth->cardOnFile(ZeroAuth::CARDONFILE_USAGE_FIRST, ZeroAuth::CARDONFILE_REASON_RECURRING);
+
+try {
+    $validacao = (new CieloEcommerce($merchant, $environment))->zeroAuth($zeroAuth);
+
+    if ($validacao->getValid()) {
+        $issuerTransactionId = $validacao->getIssuerTransactionId();
+        $transactionLinkId   = $validacao->getTransactionLinkId(); // apenas Mastercard
+    }
 } catch (CieloRequestException $e) {
     // Em caso de erros de integração, podemos tratar o erro aqui.
     // os códigos de erro estão todos disponíveis no manual de integração.

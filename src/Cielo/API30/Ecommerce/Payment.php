@@ -52,7 +52,7 @@ class Payment implements \JsonSerializable
 
     private $issuerTransactionId;
 
-    private $tlid;
+    private $transactionLinkId;
 
     private $initiatedTransactionIndicator;
 
@@ -183,7 +183,7 @@ class Payment implements \JsonSerializable
         // (TLID vivo desde 01/07/2026). Nomes conforme doc Cielo: Payment.IssuerTransactionId e
         // Payment.TransactionLinkId. Ficam null para transacoes que a bandeira nao os devolve.
         $this->issuerTransactionId = isset($data->IssuerTransactionId) ? $data->IssuerTransactionId : null;
-        $this->tlid                = isset($data->TransactionLinkId) ? $data->TransactionLinkId : null;
+        $this->transactionLinkId   = isset($data->TransactionLinkId) ? $data->TransactionLinkId : null;
 
         // Mandate Mastercard CIT/MIT: a Cielo ecoa o indicador enviado (ou o que ela propria
         // resolveu) de volta no Payment da resposta. Guardamos no mesmo formato usado no envio
@@ -570,19 +570,19 @@ class Payment implements \JsonSerializable
     /**
      * @return mixed
      */
-    public function getTlid()
+    public function getTransactionLinkId()
     {
-        return $this->tlid;
+        return $this->transactionLinkId;
     }
 
     /**
-     * @param $tlid
+     * @param $transactionLinkId
      *
      * @return $this
      */
-    public function setTlid($tlid)
+    public function setTransactionLinkId($transactionLinkId)
     {
-        $this->tlid = $tlid;
+        $this->transactionLinkId = $transactionLinkId;
 
         return $this;
     }

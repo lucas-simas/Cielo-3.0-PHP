@@ -22,7 +22,7 @@ abstract class AbstractRequest
 	 * @param Merchant $merchant
 	 * @param LoggerInterface|null $logger
 	 */
-    public function __construct(Merchant $merchant, LoggerInterface $logger = null)
+    public function __construct(Merchant $merchant, ?LoggerInterface $logger = null)
     {
         $this->merchant = $merchant;
         $this->logger = $logger;
@@ -45,7 +45,7 @@ abstract class AbstractRequest
      * @throws \Cielo\API30\Ecommerce\Request\CieloRequestException
      * @throws \RuntimeException
      */
-    protected function sendRequest($method, $url, \JsonSerializable $content = null)
+    protected function sendRequest($method, $url, ?\JsonSerializable $content = null)
     {
         $headers = [
             'Accept: application/json',
@@ -104,12 +104,17 @@ abstract class AbstractRequest
         if (curl_errno($curl)) {
             $message = sprintf('cURL error[%s]: %s', curl_errno($curl), curl_error($curl));
 
-            $this->logger->error($message);
+            if ($this->logger !== null) {
+                $this->logger->error($message);
+            }
 
             throw new \RuntimeException($message);
         }
 
-        curl_close($curl);
+        // curl_close() nao tem efeito desde o PHP 8.0 e foi deprecated no PHP 8.5
+        if (PHP_VERSION_ID < 80000) {
+            curl_close($curl);
+        }
 
         return $this->readResponse($statusCode, $response);
     }
